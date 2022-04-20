@@ -91,7 +91,6 @@ recreate:
 	@$(MAKE) --no-print-directory decrypt-envs-stage 
 	@$(MAKE) --no-print-directory build-deploy 
 	@$(MAKE) --no-print-directory check-hasura 
-	@$(MAKE) --no-print-directory hasura-migrate 
 
 release:
 	# release: patch/minor/major
