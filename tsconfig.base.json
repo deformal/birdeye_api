@@ -14,7 +14,12 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@birdeye-api/birdeye-sdk": ["libs/birdeye-sdk/src/index.ts"],
+      "@birdeye-api/birdeye-serverless-gql-handler": [
+        "libs/birdeye-serverless-gql-handler/src/index.ts"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

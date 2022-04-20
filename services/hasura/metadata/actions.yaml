@@ -1,0 +1,14 @@
+actions:
+  - name: siteScrapper
+    definition:
+      kind: synchronous
+      handler: '{{BACKEND_LAMBDA_BASE}}/scrapper'
+      forward_client_headers: true
+custom_types:
+  enums: []
+  input_objects:
+    - name: scrapperInput
+  objects:
+    - name: scrapperOutput
+    - name: Review
+  scalars: []

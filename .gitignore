@@ -37,3 +37,17 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Serverless
+.serverless
+.webpack
+
+.env.development
+.env.production
+.env
+.env.*
+.env.mac.*
+!.env.local
+!.env.*.gpg
+
+.envrc

@@ -1,0 +1,23 @@
+{
+  "root": "libs/birdeye-serverless-gql-handler",
+  "sourceRoot": "libs/birdeye-serverless-gql-handler/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/birdeye-serverless-gql-handler/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/birdeye-serverless-gql-handler"],
+      "options": {
+        "jestConfig": "libs/birdeye-serverless-gql-handler/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

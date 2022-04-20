@@ -1,4 +1,8 @@
 {
   "version": 2,
-  "projects": {}
+  "projects": {
+    "birdeye-api": "apps/birdeye-api",
+    "birdeye-sdk": "libs/birdeye-sdk",
+    "birdeye-serverless-gql-handler": "libs/birdeye-serverless-gql-handler"
+  }
 }

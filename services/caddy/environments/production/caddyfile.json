@@ -1,0 +1,32 @@
+{
+  "admin": {
+    "disabled": false,
+    "listen": "0.0.0.0:2019",
+    "enforce_origin": false,
+    "origins": [""],
+    "config": {
+      "persist": true
+    }
+  },
+  "apps": {
+    "http": {
+      "servers": {
+        "birdeye": {
+          "@id": "birdeye_scraping_gql_api",
+          "listen": [":443"],
+          "routes": [
+            {
+              "handle": [
+                {
+                  "handler": "reverse_proxy",
+                  "upstreams": [{ "dial": "hasura:8080" }]
+                }
+              ],
+              "match": [{ "host": ["birdeye.saurabhjainwal.in"] }]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

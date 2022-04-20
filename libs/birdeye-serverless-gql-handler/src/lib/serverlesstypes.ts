@@ -1,0 +1,94 @@
+export type ServerlessEvent = {
+  body: {
+    request_query: string;
+    session_variables: {
+      'x-hasura-role': string;
+      'x-hasura-user-id': string;
+    };
+    input: { object: any };
+    action: { name: string };
+  };
+  headers: {
+    Host: string;
+    'Accept-Encoding': string;
+    'Content-Length': string;
+    'X-B3-TraceId': string;
+    'X-B3-SpanId': string;
+    'X-B3-ParentSpanId': string;
+    'sec-ch-ua': string;
+    'X-Forwarded-User-Agent': string;
+    'User-Agent': string;
+    'sec-ch-ua-mobile': string;
+    'Sec-Fetch-Mode': string;
+    'Sec-Fetch-Site': string;
+    'sec-ch-ua-platform': string;
+    'x-request-id': string;
+    'X-Forwarded-Host': string;
+    'Content-Type': string;
+    'Sec-Fetch-Dest': string;
+  };
+  httpMethod: 'POST';
+  isBase64Encoded: false;
+  multiValueHeaders: {
+    Host: [string];
+    'Accept-Encoding': Array<string>;
+    'Content-Length': Array<string>;
+    'X-B3-TraceId': Array<string>;
+    'X-B3-SpanId': Array<string>;
+    'X-B3-ParentSpanId': Array<string>;
+    'sec-ch-ua': Array<string>;
+    'X-Forwarded-User-Agent': Array<string>;
+    'User-Agent': Array<string>;
+    'sec-ch-ua-mobile': Array<string>;
+    'Sec-Fetch-Mode': Array<string>;
+    'Sec-Fetch-Site': Array<string>;
+    'sec-ch-ua-platform': Array<string>;
+    'x-request-id': Array<string>;
+    'X-Forwarded-Host': Array<string>;
+    'Content-Type': Array<string>;
+    'Sec-Fetch-Dest': Array<string>;
+  };
+  multiValueQueryStringParameters: string | null;
+  path: string;
+  pathParameters: string | null;
+  queryStringParameters: string | null;
+  requestContext: {
+    accountId: string;
+    apiId: string;
+    authorizer: {
+      claims: string | undefined;
+      scopes: string | undefined;
+      principalId: string;
+    };
+    domainName: string;
+    domainPrefix: string;
+    extendedRequestId: string;
+    httpMethod: string;
+    identity: {
+      accessKey: string | null;
+      accountId: string;
+      apiKey: string;
+      apiKeyId: string;
+      caller: string;
+      cognitoAuthenticationProvider: string;
+      cognitoAuthenticationType: string;
+      cognitoIdentityId: string;
+      cognitoIdentityPoolId: string;
+      principalOrgId: string | null;
+      sourceIp: string;
+      user: string;
+      userAgent: string;
+      userArn: string;
+    };
+    path: string;
+    protocol: string;
+    requestId: string;
+    requestTime: string;
+    requestTimeEpoch: number;
+    resourceId: string;
+    resourcePath: string;
+    stage: string;
+  };
+  resource: string;
+  stageVariables: string | undefined;
+};

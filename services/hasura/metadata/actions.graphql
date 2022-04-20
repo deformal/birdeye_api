@@ -1,0 +1,23 @@
+type Mutation {
+  siteScrapper(
+    input: scrapperInput!
+  ): scrapperOutput
+}
+
+input scrapperInput {
+  websiteLink: String
+}
+
+type scrapperOutput {
+  reviews: [Review]
+  ok: Boolean
+  message: String
+}
+
+type Review {
+  reviewComment: String
+  rating: String
+  reviewDate: String
+  reviewerName: String
+}
+

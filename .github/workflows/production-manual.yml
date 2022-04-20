@@ -1,0 +1,125 @@
+# This is a basic workflow to help you get started with Actions
+name: Production Build Manual
+
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  push:
+    branches: [master]
+
+  workflow_dispatch:
+# Global environment variables
+env:
+  NODE_ENV: production
+  DOCKER_BUILDKIT: 1
+  stage: production
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    name: Build
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    outputs:
+      docker-tag: ${{ steps.image-tag.outputs.docker-tag }}
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '16.13.2'
+
+      - name: Create docker image tag
+        id: image-tag
+        env:
+          ATTEMPT: ${{ github.run_attempt }}
+        run: echo "::set-output name=docker-tag::$(echo ${GITHUB_SHA} | cut -c1-8)-${GITHUB_RUN_ID}-${ATTEMPT}"
+
+      # configure aws client
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        # AWS credentials are set in organization secrets
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: us-east-1
+
+      # Login to AWS ECR
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Create Caddy ECR repo if missing
+        uses: byu-oit/github-action-create-ecr-repo-if-missing@v1
+        with:
+          DOCKER_REPO_NAME: birdeye-caddy
+
+      - name: Create Hasura ECR repo if missing
+        uses: byu-oit/github-action-create-ecr-repo-if-missing@v1
+        with:
+          DOCKER_REPO_NAME: birdeye-hasura
+
+      # Runs a set of commands using the runners shell
+      - name: NX Build, Docker Build and Docker Push
+        env:
+          # This has to be set in github repository secrets
+          PASSPHRASE_PRODUCTION: ${{ secrets.PASSPHRASE_PRODUCTION }}
+          # This is exported by login-ecr step
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          # This is from github context
+          IMAGE_TAG: ${{ steps.image-tag.outputs.docker-tag }}
+        run: |
+          npm ci --prefer-offline --no-audit  --ignore-scripts --also=dev
+          make decrypt-env-stage passphrase=$PASSPHRASE_PRODUCTION
+          make create-env-stage
+          npx nx run-many --target=docker --all
+          npx nx run-many --target=deploy --all -- --stage=$stage
+
+  # Deploy job
+  deploy:
+    name: Deploy
+
+    # select runner with all specified tags
+    runs-on: [self-hosted, birdeye-prod]
+
+    # add job dependency to not run the jobs in parallel and to fail pipeline
+    # if the dependency fails
+    needs: [build]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Decrypt environment variables
+        env:
+          PASSPHRASE_PRODUCTION: ${{ secrets.PASSPHRASE_PRODUCTION }}
+        run: make decrypt-env-stage passphrase=$PASSPHRASE_PRODUCTION
+
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      # Pull the images from ecr and deploy on the same server
+      - name: Pull and Deploy
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ needs.build.outputs.docker-tag }}
+        run: |
+          make pull
+          make deploy

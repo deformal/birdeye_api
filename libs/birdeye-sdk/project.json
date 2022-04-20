@@ -1,0 +1,23 @@
+{
+  "root": "libs/birdeye-sdk",
+  "sourceRoot": "libs/birdeye-sdk/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/birdeye-sdk/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/birdeye-sdk"],
+      "options": {
+        "jestConfig": "libs/birdeye-sdk/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

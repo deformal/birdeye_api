@@ -1,0 +1,46 @@
+service: birdeye-api
+
+plugins:
+  - serverless-bundle
+  - serverless-offline
+  - serverless-dotenv-plugin
+
+custom:
+  stage: ${opt:stage, 'development'}
+  region: ap-south-1
+  bundle:
+    linting: false
+    tsConfig: 'tsconfig.app.json'
+  serverless-offline:
+    host: 0.0.0.0
+    httpPort: 3222
+    lambdaPort: 3200
+    noPrependStageInUrl: true
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: ${self:custom.stage}
+  endpointType: regional
+  timeout: 20
+  region: ${self:custom.region}
+  lambdaHashingVersion: 20201221 # removes deprecation warning (remove in serverless v3)
+  apiGateway:
+    shouldStartNameWithService: true # removes deprecation warning (remove in serverless v3)
+  environment:
+    AWS_LAMBDA_SERVICE: ${self:service}
+    APP_ENV: ${self:custom.stage}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+      Resource: '*'
+
+functions:
+  scrapper:
+    handler: src/handlers/scrapper.handler
+    events:
+      - http:
+          method: POST
+          path: /scrapper
