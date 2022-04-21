@@ -1,8 +1,8 @@
 import { prepareHandler, ServerlessEvent } from "@birdeye-api/birdeye-serverless-gql-handler";
 
 export const handler =  prepareHandler(async (event:ServerlessEvent) => {
-    console.log(event.body)
-    const reviews = [{
+  const input = event.body.input.input
+  const reviews = [{
       reviewDate:"hey",
       rating:"sup",
       reviewerName:"cool",

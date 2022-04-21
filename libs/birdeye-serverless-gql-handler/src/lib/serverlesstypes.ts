@@ -5,7 +5,7 @@ export type ServerlessEvent = {
       'x-hasura-role': string;
       'x-hasura-user-id': string;
     };
-    input: { object: any };
+    input: { input: any };
     action: { name: string };
   };
   headers: {
