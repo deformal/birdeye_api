@@ -8,6 +8,7 @@ on:
     branches: [master]
 
   workflow_dispatch:
+
 # Global environment variables
 env:
   NODE_ENV: production
@@ -49,8 +50,8 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         # AWS credentials are set in organization secrets
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-south-1
 
       # Login to AWS ECR
@@ -72,14 +73,14 @@ jobs:
       - name: NX Build, Docker Build and Docker Push
         env:
           # This has to be set in github repository secrets
-          PASSPHRASE_PRODUCTION: ${{ secrets.PASSPHRASE_PRODUCTION }}
+          PASSPHRASE_production: ${{ secrets.PASSPHRASE_production }}
           # This is exported by login-ecr step
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           # This is from github context
           IMAGE_TAG: ${{ steps.image-tag.outputs.docker-tag }}
         run: |
-          npm ci --prefer-offline --no-audit  --ignore-scripts --also=dev
-          make decrypt-env-stage passphrase=$PASSPHRASE_PRODUCTION
+          yarn
+          make decrypt-env-stage passphrase=$PASSPHRASE_production
           make create-env-stage
           npx nx run-many --target=docker --all
           npx nx run-many --target=deploy --all -- --stage=$stage
@@ -98,17 +99,23 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '16.13.2'
 
       - name: Decrypt environment variables
         env:
-          PASSPHRASE_PRODUCTION: ${{ secrets.PASSPHRASE_PRODUCTION }}
-        run: make decrypt-env-stage passphrase=$PASSPHRASE_PRODUCTION
+          PASSPHRASE_production: ${{ secrets.PASSPHRASE_production }}
+        run: make decrypt-env-stage passphrase=$PASSPHRASE_production
 
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-south-1
 
       - name: Login to Amazon ECR
