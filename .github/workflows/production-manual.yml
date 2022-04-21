@@ -73,7 +73,7 @@ jobs:
       - name: NX Build, Docker Build and Docker Push
         env:
           # This has to be set in github repository secrets
-          PASSPHRASE_production: ${{ secrets.PASSPHRASE_production }}
+          PASSPHRASE_PRODUCTION: ${{ secrets.PASSPHRASE_production }}
           # This is exported by login-ecr step
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           # This is from github context
@@ -108,7 +108,7 @@ jobs:
 
       - name: Decrypt environment variables
         env:
-          PASSPHRASE_production: ${{ secrets.PASSPHRASE_PRODUCTION }}
+          PASSPHRASE_PRODUCTION: ${{ secrets.PASSPHRASE_PRODUCTION }}
         run: make decrypt-env-stage passphrase=$PASSPHRASE_PRODUCTION
 
       - name: Configure AWS
