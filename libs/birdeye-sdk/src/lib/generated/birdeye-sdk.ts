@@ -47,6 +47,8 @@ export type ScrapperInput = {
 
 export type ScrapperOutput = {
   __typename?: 'scrapperOutput';
+  message?: Maybe<Scalars['String']>;
+  ok?: Maybe<Scalars['Boolean']>;
   reviews?: Maybe<Array<Maybe<Review>>>;
 };
 
