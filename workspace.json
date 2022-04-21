@@ -32,6 +32,7 @@
         "docker": {
           "executor": "@nx-tools/nx-docker:build",
           "options": {
+            "context": "services/hasura",
             "file": "services/hasura/Dockerfile",
             "push": true,
             "tags": [
