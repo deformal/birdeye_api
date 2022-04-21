@@ -3,48 +3,28 @@
   "projectType": "application",
   "sourceRoot": "apps/birdeye-api/src",
   "targets": {
-    "serve": {
-      "executor": "@ns3/nx-serverless:sls",
+    "build": {
+      "executor": "@ns3/nx-serverless:build",
+      "outputs": ["{options.outputPath}"],
       "options": {
-        "command": "offline"
+        "outputPath": "apps/birdeye-api/.serverless"
       }
     },
-    "package": {
-      "executor": "@ns3/nx-serverless:sls",
-      "outputs": ["apps/birdeye-api/.serverless", "dist/apps/birdeye-api"],
-      "dependsOn": [
-        {
-          "target": "build",
-          "projects": "dependencies"
-        }
-      ],
+    "serve": {
+      "executor": "@ns3/nx-serverless:serve",
       "options": {
-        "command": "package"
+        "out": "../../dist/apps/birdeye-api/.serverless"
       }
     },
     "deploy": {
-      "executor": "@ns3/nx-serverless:sls",
-      "outputs": ["apps/birdeye-api/.serverless", "dist/apps/birdeye-api"],
-      "dependsOn": [
-        {
-          "target": "package",
-          "projects": "self"
-        }
-      ],
+      "executor": "@ns3/nx-serverless:deploy",
+      "outputs": ["{options.outputPath}"],
       "options": {
-        "command": "deploy",
-        "package": ".serverless"
+        "outputPath": "apps/birdeye-api/.serverless"
       }
     },
     "remove": {
-      "executor": "@ns3/nx-serverless:sls",
-      "options": {
-        "command": "remove"
-      }
-    },
-    "sls": {
-      "executor": "@ns3/nx-serverless:sls",
-      "options": {}
+      "executor": "@ns3/nx-serverless:remove"
     },
     "test": {
       "executor": "@nrwl/jest:jest",
@@ -58,7 +38,9 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/birdeye-api/src/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": [
+          "apps/birdeye-api/src/**/*.{ts,tsx,js,jsx}"
+        ]
       }
     }
   },
