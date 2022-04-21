@@ -100,6 +100,13 @@ release:
 release-changelog:
 	$(BASE_PATH)/scripts/release-changelog.sh "$(BASE_PATH)" "$(stage)"
 
+decrypt-env-stage:
+	@echo
+	@echo "🚀Decrypt secrets $(stage)"
+	@echo
+	@chmod +x ./scripts/decrypt.sh
+	@./scripts/decrypt.sh "$(PWD)" "$(passphrase)" "$(stage)"
+
 decrypt-envs-stage:
 	@npx @raftlabs/nx-manage decrypt -e production -p $(PASSPHRASE_PRODUCTION)
 	@npx @raftlabs/nx-manage decrypt -e development -p $(PASSPHRASE_DEVELOPMENT)
