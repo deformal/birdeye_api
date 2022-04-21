@@ -10,14 +10,14 @@ services:
       - db_data:/var/lib/postgresql/data
 
   hasura:
-    image: $ECR_REGISTRY/gal3n-hasura:$IMAGE_TAG
+    image: $ECR_REGISTRY/birdeye-hasura:$IMAGE_TAG
     restart: always
     ports:
       - 8080:8080
     env_file: $BASE_PATH/services/hasura/.env.production
 
   caddy:
-    image: $ECR_REGISTRY/gal3n-caddy:$IMAGE_TAG
+    image: $ECR_REGISTRY/birdeye-caddy:$IMAGE_TAG
     restart: unless-stopped
     ports:
       - '80:80'
