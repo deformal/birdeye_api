@@ -16,6 +16,8 @@ services:
       - 8080:8080
     depends_on:
       - "postgres"  
+    build:
+      context: $BASE_PATH/services/hasura  
     env_file: $BASE_PATH/services/hasura/.env.production
 
   caddy:
