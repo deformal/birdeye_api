@@ -82,7 +82,7 @@ jobs:
           npm ci --prefer-offline --no-audit  --ignore-scripts --also=dev
           make decrypt-env-stage passphrase=$PASSPHRASE_PRODUCTION
           make create-env-stage
-          npx nx run-many --target=docker --all
+          npx nx run-many --target=docker --all --verbose
           npx nx run-many --target=deploy --all -- --stage=$stage
 
   # Deploy job
