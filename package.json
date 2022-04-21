@@ -8,7 +8,6 @@
     "test": "nx test",
     "codegen": "graphql-codegen --config codegen.yml -w",
     "backend:serve": "nx run-many --target=serve --projects=birdeye-api --parallel --maxParallel=20"
-
   },
   "private": true,
   "devDependencies": {
@@ -42,6 +41,7 @@
     "typescript": "~4.6.2"
   },
   "dependencies": {
+    "@nx-tools/nx-docker": "^2.3.0",
     "graphql": "^16.3.0",
     "hasura-cli": "^2.5.0",
     "serverless-dotenv-plugin": "^4.0.0",
