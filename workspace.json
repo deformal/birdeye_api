@@ -23,26 +23,6 @@
           }
         }
       }
-    },
-
-    "hasura": {
-      "root": "services/hasura",
-      "sourceRoot": "services/hasura",
-      "projectType": "library",
-      "targets": {
-        "docker": {
-          "executor": "@nx-tools/nx-docker:build",
-          "options": {
-            "context": "services/hasura",
-            "push": true,
-            "tags": [
-              "$ECR_REGISTRY/birdeye-hasura:latest",
-              "$ECR_REGISTRY/birdeye-hasura:$IMAGE_TAG"
-            ]
-          }
-        }
-      }
     }
-
   }
 }
