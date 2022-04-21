@@ -22,7 +22,7 @@
                   "upstreams": [{ "dial": "hasura:8080" }]
                 }
               ],
-              "match": [{ "host": ["birdeyeapi.saurabhjainwalapi.in"] }]
+              "match": [{ "host": ["saurabhjainwalapi.in"] }]
             }
           ]
         }
