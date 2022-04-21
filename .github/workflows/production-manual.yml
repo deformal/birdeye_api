@@ -79,8 +79,8 @@ jobs:
           # This is from github context
           IMAGE_TAG: ${{ steps.image-tag.outputs.docker-tag }}
         run: |
-          yarn
-          make decrypt-env-stage passphrase=$PASSPHRASE_production
+          npm ci --prefer-offline --no-audit  --ignore-scripts --also=dev
+          make decrypt-env-stage passphrase=$PASSPHRASE_PRODUCTION
           make create-env-stage
           npx nx run-many --target=docker --all
           npx nx run-many --target=deploy --all -- --stage=$stage
@@ -108,8 +108,8 @@ jobs:
 
       - name: Decrypt environment variables
         env:
-          PASSPHRASE_production: ${{ secrets.PASSPHRASE_production }}
-        run: make decrypt-env-stage passphrase=$PASSPHRASE_production
+          PASSPHRASE_production: ${{ secrets.PASSPHRASE_PRODUCTION }}
+        run: make decrypt-env-stage passphrase=$PASSPHRASE_PRODUCTION
 
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v1
