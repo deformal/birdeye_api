@@ -3,6 +3,46 @@
   "projects": {
     "birdeye-api": "apps/birdeye-api",
     "birdeye-sdk": "libs/birdeye-sdk",
-    "birdeye-serverless-gql-handler": "libs/birdeye-serverless-gql-handler"
+    "birdeye-serverless-gql-handler": "libs/birdeye-serverless-gql-handler",
+
+    "hasura": {
+      "root": "services/hasura",
+      "sourceRoot": "services/hasura",
+      "projectType": "library",
+      "targets": {
+        "docker": {
+          "executor": "@nx-tools/nx-docker:build",
+          "options": {
+            "context": "services/hasura",
+            "push": true,
+            "tags": [
+              "$ECR_REGISTRY/birdeye-hasura:latest",
+              "$ECR_REGISTRY/birdeye-hasura:$IMAGE_TAG"
+            ]
+          }
+        }
+      }
+    },
+
+    "caddy": {
+      "root": "services/caddy",
+      "sourceRoot": "services/caddy",
+      "projectType": "library",
+      "targets": {
+        "docker": {
+          "executor": "@nx-tools/nx-docker:build",
+          "options": {
+            "context": "services/caddy/environments/$stage",
+            "file": "services/caddy/Dockerfile",
+            "push": true,
+            "tags": [
+              "$ECR_REGISTRY/birdeye-caddy:latest",
+              "$ECR_REGISTRY/birdeye-caddy:$IMAGE_TAG"
+            ]
+          }
+        }
+      }
+    }
+
   }
 }
