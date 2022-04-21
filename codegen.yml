@@ -2,7 +2,7 @@ overwrite: true
 schema: 
   - 'http://localhost:8080/v1/graphql':
       headers:
-        'x-hasura-admin-secret': 'NjcG3SpuPmuIqGom442F1bwk6Vi4qzLjpfYSQAfuZtv'
+        'x-hasura-admin-secret': 'NjcG3SpuPmuIqGom442F1bwk6Vi4qzLjpfYSQAkuZtv'
 
 generates:
   ./libs/birdeye-sdk/src/lib/generated/birdeye-sdk.ts:
