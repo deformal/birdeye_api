@@ -9,7 +9,7 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
   hasura:
-    image: hasura/graphql-engine:v2.3.0.cli-migrations-v3
+    image: hasura/graphql-engine:v2.5.0
     restart: always
     ports:
       - 8080:8080
