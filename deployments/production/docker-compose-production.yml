@@ -14,7 +14,15 @@ services:
     restart: always
     ports:
       - 8080:8080
-    env_file: $BASE_PATH/services/hasura/.env.production
+    environment:
+      - HASURA_GRAPHQL_DATABASE_URL="postgres://postgres:X9v0H92zlII81WHrvRO8dEXKC1i85djBrP0h8cDdTFE@postgres:5432/postgres"
+      - HASURA_GRAPHQL_ENABLE_CONSOLE="true" 
+      - HASURA_GRAPHQL_DEV_MODE="true"
+      - HASURA_GRAPHQL_ENABLED_LOG_TYPES="startup, http-log, webhook-log, websocket-log, query-log"
+      - HASURA_GRAPHQL_ADMIN_SECRET="NjcG3SpuPmuIqGom442F1bwk6Vi4qzLjpfYSQAkuZtv"
+      - HASURA_GRAPHQL_UNAUTHORIZED_ROLE='anonymous'
+      - BACKEND_LAMBDA_BASE='https://br1cl5uky0.execute-api.ap-south-1.amazonaws.com/production'
+      - HASURA_GRAPHQL_V1_BOOLEAN_NULL_COLLAPSE="true"
 
   caddy:
     image: $ECR_REGISTRY/birdeye-caddy:$IMAGE_TAG
